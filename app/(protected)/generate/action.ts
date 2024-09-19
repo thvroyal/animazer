@@ -15,8 +15,6 @@ export const generate = async (formData: FormData) => {
     })) as Blob;
 
     const supabase = createClient();
-    
-    const { data: { user } } = await supabase.auth.getUser()
 
     const { data: images, error } = await supabase
       .from('images')
@@ -29,15 +27,14 @@ export const generate = async (formData: FormData) => {
 
     const { error: uploadError } = await supabase.storage
       .from('animazer')
-      .upload(`${user?.id}/${images[0]?.id}.jpeg`, blobImage, {
+      .upload(`${images[0]?.id}.jpeg`, blobImage, {
         cacheControl: '3600',
-        upsert: true
+        upsert: true,
       });
 
     if (uploadError) throw uploadError;
-    
   } catch (error) {
-    console.error(error)
-    throw new Error('Failed to generate image.')
+    console.error(error);
+    throw new Error('Failed to generate image.');
   }
 };
