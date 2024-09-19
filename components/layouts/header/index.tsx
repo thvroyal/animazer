@@ -1,4 +1,4 @@
-import AuthButton from '@/components/header-auth';
+import AuthButton from './header-auth';
 import Link from 'next/link';
 import Navigation from './navigation';
 

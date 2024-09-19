@@ -7,7 +7,7 @@
     "eslint-check": "eslint --max-warnings=0 .",
     "prettier-check": "prettier --check .",
     "prettier-write": "prettier --write .",
-    "supabase:generate-types": "supabase gen types --lang=typescript --local > database.types.ts"
+    "supabase:generate-types": "supabase gen types --lang=typescript --local --schema=storage,public > supabase/functions/_shared/database.types.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

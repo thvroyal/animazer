@@ -1,13 +1,12 @@
 import { ImagesShell } from '@/components/images-shell';
 import { createClient } from '@/utils/supabase/server';
 
-export default async function ExplorePage() {
+export default async function ProfilePage() {
   const supabase = createClient();
 
   const { data } = await supabase
     .from('images')
     .select()
-    .eq('is_public', true)
     .order('created_at', { ascending: false })
     .throwOnError();
   const imageUrls = data

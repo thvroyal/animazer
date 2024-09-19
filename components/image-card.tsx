@@ -1,20 +1,39 @@
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { Button } from './ui/button';
+import ActionButton from './action-button';
+import { createClient } from '@/utils/supabase/server';
+import { Tables } from '@/database.types';
+import { SubmitButton } from './submit-button';
+import { publicImage } from '@/app/actions';
 
-interface ImageCardProps {
-  imgUrl: string | null;
-  prompt: string | null;
+interface ImageCardProps extends Tables<'images'> {
+  url: string;
 }
 
-export function ImageCard({ imgUrl, prompt }: ImageCardProps) {
+export async function ImageCard({
+  url,
+  input,
+  id,
+  created_by,
+  is_public,
+}: ImageCardProps) {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const canPublic = user && user.id === created_by && !is_public;
+
   return (
     <div className="overflow-hidden rounded-2xl shadow-sm">
       <div className="flex w-full flex-col rounded-xl bg-white/5 p-2">
-        {prompt && imgUrl && (
+        {input && url && (
           <div className="aspect-[1] size-full cursor-pointer select-none">
             <Image
-              alt={prompt}
-              src={imgUrl}
+              alt={input}
+              src={url}
               loading="lazy"
               width={100}
               height={100}
@@ -66,7 +85,13 @@ export function ImageCard({ imgUrl, prompt }: ImageCardProps) {
               </div>
             )}
           </div> */}
-          <p className={cn('text-sm truncate')}>{prompt}</p>
+          <p className={cn('text-sm truncate')}>{input}</p>
+          {canPublic && (
+            <form action={publicImage}>
+              <input hidden defaultValue={id} name="id" />
+              <SubmitButton>Public</SubmitButton>
+            </form>
+          )}
         </div>
       </div>
     </div>

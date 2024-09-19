@@ -1,13 +1,11 @@
-import React from "react"
+import React from 'react';
 
-import { Skeleton } from "@/components/ui/skeleton"
-import { ImageCard } from "@/components/image-card"
+import { Skeleton } from '@/components/ui/skeleton';
+import { ImageCard } from '@/components/image-card';
+import { Tables } from '@/database.types';
 
 interface ImagesSectionProps {
-  images: {
-    url: string
-    prompt: string
-  }[]
+  images: (Tables<'images'> & { url: string })[];
 }
 
 export const ImagesShell = React.forwardRef<HTMLDivElement, ImagesSectionProps>(
@@ -15,7 +13,7 @@ export const ImagesShell = React.forwardRef<HTMLDivElement, ImagesSectionProps>(
     return (
       <section className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {images.map((data, idx) => (
-          <ImageCard key={idx} imgUrl={data.url} prompt={data.prompt} />
+          <ImageCard key={idx} {...data} />
         ))}
         {/* {hasNextPage && (
           <>
@@ -32,8 +30,8 @@ export const ImagesShell = React.forwardRef<HTMLDivElement, ImagesSectionProps>(
           </>
         )} */}
       </section>
-    )
+    );
   },
-)
+);
 
-ImagesShell.displayName = "ImagesSection"
+ImagesShell.displayName = 'ImagesSection';
