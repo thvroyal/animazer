@@ -1,5 +1,5 @@
-import { createServerClient } from "@supabase/ssr";
-import { type NextRequest, NextResponse } from "next/server";
+import { createServerClient } from '@supabase/ssr';
+import { type NextRequest, NextResponse } from 'next/server';
 
 export const updateSession = async (request: NextRequest) => {
   // This `try/catch` block is only here for the interactive tutorial.
@@ -40,14 +40,16 @@ export const updateSession = async (request: NextRequest) => {
     const user = await supabase.auth.getUser();
 
     // protected routes
-    const protectedRoutes = ["/reset-password", "/generate"];
-    const isProtectedRoute = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route));
+    const protectedRoutes = ['/reset-password', '/generate', '/profile'];
+    const isProtectedRoute = protectedRoutes.some((route) =>
+      request.nextUrl.pathname.startsWith(route),
+    );
     if (isProtectedRoute && user.error) {
-      return NextResponse.redirect(new URL("/auth/sign-in", request.url));
+      return NextResponse.redirect(new URL('/auth/sign-in', request.url));
     }
 
-    if (request.nextUrl.pathname === "/auth" && !user.error) {
-      return NextResponse.redirect(new URL("/", request.url));
+    if (request.nextUrl.pathname === '/auth' && !user.error) {
+      return NextResponse.redirect(new URL('/', request.url));
     }
 
     return response;

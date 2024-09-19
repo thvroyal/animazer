@@ -1,7 +1,7 @@
 import { HfInference } from 'https://esm.sh/@huggingface/inference@2.8.0';
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { createClient, FunctionsHttpError } from 'jsr:@supabase/supabase-js';
-import { Database, Tables } from '../_shared/database.types.ts';
+import { Database } from '../_shared/database.types.ts';
 import { handleError } from '../_shared/error-handling.ts';
 
 type GeneratePayload = {
@@ -10,14 +10,15 @@ type GeneratePayload = {
     token: string;
     path: string;
   };
-  record: Tables<'images'>;
+  input: string;
+  model: string;
 };
 
 const hf = new HfInference(Deno.env.get('HUGGINGFACE_KEY'));
 
 Deno.serve(async (req) => {
   const payload: GeneratePayload = await req.json();
-  const { input } = payload.record;
+  const { input, model = 'alvdansen/littletinies' } = payload;
   const { token, path } = payload.upload;
 
   try {
@@ -29,7 +30,7 @@ Deno.serve(async (req) => {
     if (!input) throw new FunctionsHttpError('Missing input');
 
     const blobImage = (await hf.request({
-      model: 'alvdansen/littletinies',
+      model,
       inputs: input,
     })) as File;
 

@@ -5,7 +5,7 @@ import ActionButton from './action-button';
 import { createClient } from '@/utils/supabase/server';
 import { Tables } from '@/database.types';
 import { SubmitButton } from './submit-button';
-import { publicImage } from '@/app/actions';
+import { publicImage } from '@/app/actions/images';
 
 interface ImageCardProps extends Tables<'images'> {
   url: string;

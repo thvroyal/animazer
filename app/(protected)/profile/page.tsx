@@ -4,9 +4,16 @@ import { createClient } from '@/utils/supabase/server';
 export default async function ProfilePage() {
   const supabase = createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return;
+
   const { data } = await supabase
     .from('images')
     .select()
+    .eq('created_by', user.id)
     .order('created_at', { ascending: false })
     .throwOnError();
   const imageUrls = data

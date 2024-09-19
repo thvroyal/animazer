@@ -25,11 +25,11 @@ export const signUpAction = async (formData: FormData) => {
 
   if (error) {
     console.error(error.code + ' ' + error.message);
-    return encodedRedirect('error', '/sign-up', error.message);
+    return encodedRedirect('error', '/auth/sign-up', error.message);
   } else {
     return encodedRedirect(
       'success',
-      '/sign-up',
+      '/auth/sign-up',
       'Thanks for signing up! Please check your email for a verification link.',
     );
   }
@@ -46,7 +46,7 @@ export const signInAction = async (formData: FormData) => {
   });
 
   if (error) {
-    return encodedRedirect('error', '/sign-in', error.message);
+    return encodedRedirect('error', '/auth/sign-in', error.message);
   }
 
   return redirect('/');
@@ -67,7 +67,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${origin}/auth/callback?redirect_to=/protected/reset-password`,
+    redirectTo: `${origin}/auth/callback?redirect_to=/reset-password`,
   });
 
   if (error) {
@@ -123,12 +123,4 @@ export const signOutAction = async () => {
   const supabase = createClient();
   await supabase.auth.signOut();
   return redirect('/auth/sign-in');
-};
-
-export const publicImage = async (formData: FormData) => {
-  const id = formData.get('id')?.toString();
-  if (!id) return;
-
-  const supabase = createClient();
-  await supabase.from('images').update({ is_public: true }).eq('id', id);
 };
