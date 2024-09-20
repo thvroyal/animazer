@@ -12,6 +12,7 @@ import { createClient } from '@/utils/supabase/server';
 import { User, WandSparkles } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../../ui/button';
+import { ThemeSwitcher } from '@/components/theme-switcher';
 
 export default async function AuthButton() {
   const {
@@ -23,7 +24,7 @@ export default async function AuthButton() {
       <Button asChild size="sm">
         <Link href="/generate" className="inline-flex gap-2">
           <WandSparkles size={16} />
-          <span>Generate</span>
+          <span>Draw</span>
         </Link>
       </Button>
       <DropdownMenu>
@@ -33,20 +34,22 @@ export default async function AuthButton() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+          <DropdownMenuLabel>My account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem asChild className="cursor-pointer">
               <Link href="/profile">Profile</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>Billing</DropdownMenuItem>
             <DropdownMenuItem disabled>Settings</DropdownMenuItem>
-            <DropdownMenuItem disabled>Keyboard shortcuts</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>GitHub</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
-          <DropdownMenuItem disabled>API</DropdownMenuItem>
+          <DropdownMenuItem className="justify-between focus:bg-popover focus:text-popover-foreground">
+            <span>Theme</span>
+            <ThemeSwitcher />
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <Link href="#">Feedback</Link>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="cursor-pointer" asChild>
             <form action={signOutAction}>
