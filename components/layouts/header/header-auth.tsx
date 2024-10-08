@@ -12,7 +12,7 @@ import { createClient } from '@/utils/supabase/server';
 import { User, WandSparkles } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../../ui/button';
-import { ThemeSwitcher } from '@/components/theme-switcher';
+import DrawButton from '@/components/draw-button';
 
 export default async function AuthButton() {
   const {
@@ -21,12 +21,7 @@ export default async function AuthButton() {
 
   return user ? (
     <div className="flex items-center gap-4">
-      <Button asChild size="sm">
-        <Link href="/generate" className="inline-flex gap-2">
-          <WandSparkles size={16} />
-          <span>Draw</span>
-        </Link>
-      </Button>
+      <DrawButton key={new Date().getTime()} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon" className="rounded-full">
@@ -43,10 +38,6 @@ export default async function AuthButton() {
             <DropdownMenuItem disabled>Settings</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="justify-between focus:bg-popover focus:text-popover-foreground">
-            <span>Theme</span>
-            <ThemeSwitcher />
-          </DropdownMenuItem>
           <DropdownMenuItem asChild className="cursor-pointer">
             <Link href="#">Feedback</Link>
           </DropdownMenuItem>

@@ -18,7 +18,7 @@ const hf = new HfInference(Deno.env.get('HUGGINGFACE_KEY'));
 
 Deno.serve(async (req) => {
   const payload: GeneratePayload = await req.json();
-  const { input, model = 'alvdansen/phantasma-anime' } = payload;
+  const { input, model = 'alvdansen/littletinies' } = payload;
   const { token, path } = payload.upload;
 
   try {

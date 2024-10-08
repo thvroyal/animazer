@@ -56,4 +56,8 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  [contenteditable=true]:empty:before{
+    @apply pointer-events-none text-muted-foreground block content-[attr(data-placeholder)];
+  }
 }
