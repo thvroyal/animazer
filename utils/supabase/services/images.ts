@@ -53,3 +53,16 @@ export const getOwnerImages = async () => {
 
   return await getSignedImageUrls(data);
 };
+
+export const getImageFromId = async (imageId: string) => {
+  const supabase = createClient();
+
+  const { data } = await supabase
+    .from('images')
+    .select()
+    .eq('id', imageId)
+    .single();
+
+  if (!data) return null;
+  return await getSignedImageUrls([data]);
+};

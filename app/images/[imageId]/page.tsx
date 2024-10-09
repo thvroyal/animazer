@@ -1,0 +1,24 @@
+import { getImageFromId } from '@/utils/supabase/services/images';
+import Image from 'next/image';
+
+export default async function DetailsPage({
+  params,
+}: {
+  params: { imageId: string };
+}) {
+  const [image] = (await getImageFromId(params.imageId)) || [];
+
+  if (!image) {
+    return <div>Image not found</div>;
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <h1 className="text-2xl font-bold">Image Details</h1>
+      {image && (
+        <Image src={image.url} alt={image.input || image.id} width={500} height={500} />
+      )}
+      <p>{image.input}</p>
+    </div>
+  );
+}
