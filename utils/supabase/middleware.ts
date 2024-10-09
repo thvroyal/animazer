@@ -40,7 +40,7 @@ export const updateSession = async (request: NextRequest) => {
     const user = await supabase.auth.getUser();
 
     // protected routes
-    const protectedRoutes = ['/reset-password', '/generate', '/profile'];
+    const protectedRoutes = ['/reset-password', '/generate', '/gallery'];
     const isProtectedRoute = protectedRoutes.some((route) =>
       request.nextUrl.pathname.startsWith(route),
     );

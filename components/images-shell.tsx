@@ -1,19 +1,18 @@
 import React from 'react';
 
-import { Skeleton } from '@/components/ui/skeleton';
-import { ImageCard } from '@/components/image-card';
-import { Tables } from '@/database.types';
+import { ImageCard, ImageCardProps } from '@/components/image-card';
 
 interface ImagesSectionProps {
-  images: (Tables<'images'> & { url: string })[];
+  images: ImageCardProps[];
+  showAuthor?: ImageCardProps['showAuthor'];
 }
 
 export const ImagesShell = React.forwardRef<HTMLDivElement, ImagesSectionProps>(
-  ({ images }, ref) => {
+  ({ images, showAuthor }, ref) => {
     return (
-      <section className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <section className="grid w-full grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {images.map((data, idx) => (
-          <ImageCard key={idx} {...data} />
+          <ImageCard key={idx} showAuthor={showAuthor} {...data} />
         ))}
         {/* {hasNextPage && (
           <>

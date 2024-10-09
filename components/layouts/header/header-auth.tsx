@@ -33,7 +33,7 @@ export default async function AuthButton() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem asChild className="cursor-pointer">
-              <Link href="/profile">Profile</Link>
+              <Link href="/gallery">My gallery</Link>
             </DropdownMenuItem>
             <DropdownMenuItem disabled>Settings</DropdownMenuItem>
           </DropdownMenuGroup>

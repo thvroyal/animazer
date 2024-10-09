@@ -5,6 +5,8 @@ import { GeistSans } from 'geist/font/sans';
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
 import Footer from '@/components/layouts/footer';
+import { FlashMessage } from '@/components/flash-message';
+import { getFlashMessage } from '@/utils/flash-message';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -22,6 +24,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const flashMessage = getFlashMessage();
   return (
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
@@ -39,6 +42,7 @@ export default function RootLayout({
             </div>
           </main>
           <Toaster />
+          <FlashMessage flashMessage={flashMessage} />
         </ThemeProvider>
       </body>
     </html>
