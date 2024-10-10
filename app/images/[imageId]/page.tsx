@@ -2,6 +2,8 @@ import { getImageFromId } from '@/utils/supabase/services/images';
 import Image from 'next/image';
 import { ModalWrapper } from './modal-wrapper';
 import { format } from 'date-fns';
+import CopyButton from '@/components/copy-button';
+import { Copy } from 'lucide-react';
 
 export default async function DetailsPage({
   params,
@@ -31,10 +33,25 @@ export default async function DetailsPage({
             />
           )}
         </div>
-        <div className="col-span-3">
-          <p>{image.profileId}</p>
-          <p>{format(image.createdAt, 'yyyy-MM-dd HH:mm')}</p>
-          <p>{image.input}</p>
+        <div className="col-span-3 space-y-6">
+          <p>{image.profile?.id}</p>
+          <p className="text-xs text-foreground/50">{format(image.createdAt, 'yyyy-MM-dd HH:mm')}</p>
+          <div className="w-full gap-2 p-3 bg-popover-foreground/10 rounded-lg">
+            <p className="text-xs text-foreground/50">Prompt</p>
+            <div className='inline-flex items-center gap-2'>
+              <span className="text-xs text-foreground/80">
+                {image.input}
+              </span>
+              <CopyButton
+                content={image.input || ''}
+                variant="link"
+                size="icon-xs"
+                className="text-foreground/70 hover:text-foreground"
+              >
+                <Copy />
+              </CopyButton>
+            </div>
+          </div>
         </div>
       </div>
     </ModalWrapper>

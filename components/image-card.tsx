@@ -18,8 +18,8 @@ export async function ImageCard({
   url,
   input,
   id,
-  created_by,
-  is_public,
+  profileId,
+  isPublic,
   showAuthor = false,
 }: ImageCardProps) {
   const supabase = createClient();
@@ -28,7 +28,7 @@ export async function ImageCard({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const canPublic = user && user.id === created_by && !is_public;
+  const canPublic = user && user.id === profileId && !isPublic;
 
   return (
     <div className="overflow-hidden rounded-2xl shadow-sm">
@@ -53,9 +53,9 @@ export async function ImageCard({
                 )}
               >
                 <div className="w-full inline-flex items-center gap-2">
-                  <p className="text-xs line-clamp-3 text-foreground/80">
+                  <span className="text-xs line-clamp-3 text-foreground/80">
                     {input}
-                  </p>
+                  </span>
                   <CopyButton
                     content={input}
                     variant="link"

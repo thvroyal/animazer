@@ -61,7 +61,7 @@ export const getImageFromId = async (imageId: string) => {
 
   const { data: image } = await supabase
     .from('images')
-    .select(`*, profiles(*)`)
+    .select(`*, profile:profiles(*)`)
     .eq('id', imageId)
     .single();
 

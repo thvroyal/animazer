@@ -36,7 +36,12 @@ export function ModalWrapper({
   return (
     <Dialog defaultOpen={true} open={true} onOpenChange={closeModal}>
       <DialogPortal>
-        <DialogOverlay className="bg-background/40 backdrop-blur-sm" />
+        <DialogOverlay
+          className={cn(
+            'bg-background/70 backdrop-blur-sm',
+            !isModal && 'bg-background/90',
+          )}
+        />
         <DialogPrimitive.Content
           className={cn(
             dialogContentStyles(),
@@ -62,7 +67,10 @@ export function ModalWrapper({
               <X />
             </Button> */}
           </div>
-          <div className="flex-1 h-inherit bg-background border sm:rounded-lg" ref={ref}>
+          <div
+            className="flex-1 h-inherit bg-background border sm:rounded-lg"
+            ref={ref}
+          >
             {children}
           </div>
           <div className="w-10 pointer-events-none select-none invisible" />
