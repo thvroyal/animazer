@@ -1,13 +1,14 @@
 import { getImageFromId } from '@/utils/supabase/services/images';
 import Image from 'next/image';
 import { ModalWrapper } from './modal-wrapper';
+import { format } from 'date-fns';
 
 export default async function DetailsPage({
   params,
-  isModal = false
+  isModal = false,
 }: {
   params: { imageId: string };
-  isModal?: boolean
+  isModal?: boolean;
 }) {
   const [image] = (await getImageFromId(params.imageId)) || [];
 
@@ -17,17 +18,24 @@ export default async function DetailsPage({
 
   return (
     <ModalWrapper isModal={isModal}>
-      <div className="flex flex-col items-center gap-4">
-        <h1 className="text-2xl font-bold">Image Details</h1>
-        {image && (
-          <Image
-            src={image.url}
-            alt={image.input || image.id}
-            width={500}
-            height={500}
-          />
-        )}
-        <p>{image.input}</p>
+      <div className="grid grid-cols-10 p-6 gap-6">
+        <div className="relative col-span-7 h-full select-none cursor-pointer flex items-center justify-center">
+          {image && (
+            <Image
+              src={image.url}
+              alt={image.input || image.id}
+              loading="lazy"
+              width={650}
+              height={650}
+              className="h-full rounded-xl object-cover object-top"
+            />
+          )}
+        </div>
+        <div className="col-span-3">
+          <p>{image.profileId}</p>
+          <p>{format(image.createdAt, 'yyyy-MM-dd HH:mm')}</p>
+          <p>{image.input}</p>
+        </div>
       </div>
     </ModalWrapper>
   );

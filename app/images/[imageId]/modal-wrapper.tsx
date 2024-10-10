@@ -41,7 +41,7 @@ export function ModalWrapper({
           className={cn(
             dialogContentStyles(),
             'bg-transparent border-0',
-            'overflow-y-hidden max-w-full min-h-screen shadow-none',
+            'overflow-y-hidden max-w-full max-h-screen shadow-none',
             'flex',
           )}
         >
@@ -62,7 +62,7 @@ export function ModalWrapper({
               <X />
             </Button> */}
           </div>
-          <div className="flex-1 bg-background border sm:rounded-lg" ref={ref}>
+          <div className="flex-1 h-inherit bg-background border sm:rounded-lg" ref={ref}>
             {children}
           </div>
           <div className="w-10 pointer-events-none select-none invisible" />

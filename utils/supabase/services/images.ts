@@ -1,12 +1,14 @@
 import { Tables } from '@/database.types';
 import { createClient } from '../server';
 
-const getSignedImageUrls = async (data: Tables<'images'>[] | null) => {
+const getSignedImageUrls = async <
+  T extends Tables<'images'> = Tables<'images'>,
+>(
+  data: T[] | null,
+) => {
   const supabase = createClient();
   const imageUrls = data
-    ? data.flatMap(
-        (item) => `${item.is_public ? 'public/' : ''}${item.id}.jpeg`,
-      )
+    ? data.flatMap((item) => `${item.isPublic ? 'public/' : ''}${item.id}.jpeg`)
     : [];
   const { data: signedImageUrls = [] } = await supabase.storage
     .from('animazer')
@@ -28,8 +30,8 @@ export const getPublicImages = async () => {
   const { data } = await supabase
     .from('images')
     .select()
-    .eq('is_public', true)
-    .order('created_at', { ascending: false })
+    .eq('isPublic', true)
+    .order('createdAt', { ascending: false })
     .throwOnError();
 
   return await getSignedImageUrls(data);
@@ -47,8 +49,8 @@ export const getOwnerImages = async () => {
   const { data } = await supabase
     .from('images')
     .select()
-    .eq('created_by', user.id)
-    .order('created_at', { ascending: false })
+    .eq('profileId', user.id)
+    .order('createdAt', { ascending: false })
     .throwOnError();
 
   return await getSignedImageUrls(data);
@@ -57,12 +59,12 @@ export const getOwnerImages = async () => {
 export const getImageFromId = async (imageId: string) => {
   const supabase = createClient();
 
-  const { data } = await supabase
+  const { data: image } = await supabase
     .from('images')
-    .select()
+    .select(`*, profiles(*)`)
     .eq('id', imageId)
     .single();
 
-  if (!data) return null;
-  return await getSignedImageUrls([data]);
+  if (!image) return null;
+  return await getSignedImageUrls([image]);
 };

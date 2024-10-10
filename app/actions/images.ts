@@ -19,12 +19,12 @@ export const publicImage = async (formData: FormData) => {
     return;
   }
 
-  const isPublic = !image.is_public;
+  const isPublic = !image.isPublic;
   const oldPath = isPublic ? `${id}.jpeg` : `public/${id}.jpeg`;
   const newPath = isPublic ? `public/${id}.jpeg` : `${id}.jpeg`;
 
   try {
-    await supabase.from('images').update({ is_public: isPublic }).eq('id', id);
+    await supabase.from('images').update({ isPublic: isPublic }).eq('id', id);
     await supabase.storage.from('animazer').move(oldPath, newPath);
     setFlashMessage({ type: "success", message: `Image visibility updated to ${isPublic ? 'public' : 'private'}` });
   } catch (error) {

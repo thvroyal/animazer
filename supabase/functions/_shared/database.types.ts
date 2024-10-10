@@ -11,34 +11,73 @@ export type Database = {
     Tables: {
       images: {
         Row: {
-          created_at: string
-          created_by: string
+          createdAt: string
           embedding: string | null
           id: string
           input: string | null
-          is_public: boolean
+          isPublic: boolean
+          profileId: string
         }
         Insert: {
-          created_at?: string
-          created_by?: string
+          createdAt?: string
           embedding?: string | null
           id?: string
           input?: string | null
-          is_public?: boolean
+          isPublic?: boolean
+          profileId?: string
         }
         Update: {
-          created_at?: string
-          created_by?: string
+          createdAt?: string
           embedding?: string | null
           id?: string
           input?: string | null
-          is_public?: boolean
+          isPublic?: boolean
+          profileId?: string
         }
         Relationships: [
           {
             foreignKeyName: "images_created_by_fkey"
-            columns: ["created_by"]
+            columns: ["profileId"]
             isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "images_profileId_fkey"
+            columns: ["profileId"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatarUrl: string | null
+          fullName: string | null
+          id: string
+          updatedAt: string | null
+          username: string | null
+        }
+        Insert: {
+          avatarUrl?: string | null
+          fullName?: string | null
+          id: string
+          updatedAt?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatarUrl?: string | null
+          fullName?: string | null
+          id?: string
+          updatedAt?: string | null
+          username?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
