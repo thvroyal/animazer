@@ -66,5 +66,5 @@ export const getImageFromId = async (imageId: string) => {
     .single();
 
   if (!image) return null;
-  return await getSignedImageUrls([image]);
+  return (await getSignedImageUrls([image])).at(0);
 };

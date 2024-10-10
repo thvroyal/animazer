@@ -4,6 +4,7 @@ import { ModalWrapper } from './modal-wrapper';
 import { format } from 'date-fns';
 import CopyButton from '@/components/copy-button';
 import { Copy } from 'lucide-react';
+import { redirect } from 'next/navigation';
 
 export default async function DetailsPage({
   params,
@@ -12,11 +13,9 @@ export default async function DetailsPage({
   params: { imageId: string };
   isModal?: boolean;
 }) {
-  const [image] = (await getImageFromId(params.imageId)) || [];
+  const image = await getImageFromId(params.imageId);
 
-  if (!image) {
-    return <div>Image not found</div>;
-  }
+  if (!image) redirect('/');
 
   return (
     <ModalWrapper isModal={isModal}>
@@ -35,13 +34,13 @@ export default async function DetailsPage({
         </div>
         <div className="col-span-3 space-y-6">
           <p>{image.profile?.id}</p>
-          <p className="text-xs text-foreground/50">{format(image.createdAt, 'yyyy-MM-dd HH:mm')}</p>
+          <p className="text-xs text-foreground/50">
+            {format(image.createdAt, 'yyyy-MM-dd HH:mm')}
+          </p>
           <div className="w-full gap-2 p-3 bg-popover-foreground/10 rounded-lg">
             <p className="text-xs text-foreground/50">Prompt</p>
-            <div className='inline-flex items-center gap-2'>
-              <span className="text-xs text-foreground/80">
-                {image.input}
-              </span>
+            <div className="inline-flex items-center gap-2">
+              <span className="text-xs text-foreground/80">{image.input}</span>
               <CopyButton
                 content={image.input || ''}
                 variant="link"

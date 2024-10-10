@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils';
 import { createClient } from '@/utils/supabase/server';
 import Image from 'next/image';
 import { SubmitButton } from './submit-button';
-import { Button } from './ui/button';
 import { Copy } from 'lucide-react';
 import CopyButton from './copy-button';
 import Link from 'next/link';
