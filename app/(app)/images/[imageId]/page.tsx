@@ -15,7 +15,7 @@ export default async function DetailsPage({
 }) {
   const image = await getImageFromId(params.imageId);
 
-  if (!image) redirect('/');
+  if (!image) redirect('/explore');
 
   return (
     <ModalWrapper isModal={isModal}>

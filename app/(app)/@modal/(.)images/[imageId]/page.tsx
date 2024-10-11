@@ -1,4 +1,4 @@
-import DetailsPage from '@/app/images/[imageId]/page';
+import DetailsPage from '@/app/(app)/images/[imageId]/page';
 
 export default function ImageDetailsModal({
   params,

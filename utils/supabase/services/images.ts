@@ -29,7 +29,7 @@ export const getPublicImages = async () => {
 
   const { data } = await supabase
     .from('images')
-    .select()
+    .select(`*, profile:profiles(*)`)
     .eq('isPublic', true)
     .order('createdAt', { ascending: false })
     .throwOnError();

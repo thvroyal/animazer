@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { createClient } from '@/utils/supabase/server';
-import { User, WandSparkles } from 'lucide-react';
+import { User } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../../ui/button';
 import DrawButton from '@/components/draw-button';
@@ -52,11 +52,8 @@ export default async function AuthButton() {
     </div>
   ) : (
     <div className="flex gap-2">
-      <Button asChild size="sm" variant={'outline'}>
-        <Link href="/auth/sign-in">Sign in</Link>
-      </Button>
       <Button asChild size="sm" variant={'default'}>
-        <Link href="/auth/sign-up">Sign up</Link>
+        <Link href="/auth/sign-in">Sign in</Link>
       </Button>
     </div>
   );

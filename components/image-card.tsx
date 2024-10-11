@@ -11,6 +11,7 @@ import Link from 'next/link';
 export interface ImageCardProps extends Tables<'images'> {
   url: string;
   showAuthor?: boolean;
+  profile?: Tables<'profiles'> | null
 }
 
 export async function ImageCard({
@@ -20,6 +21,7 @@ export async function ImageCard({
   profileId,
   isPublic,
   showAuthor = false,
+  profile,
 }: ImageCardProps) {
   const supabase = createClient();
 
@@ -33,7 +35,7 @@ export async function ImageCard({
     <div className="overflow-hidden rounded-2xl shadow-sm">
       <div className="relative flex w-full flex-col rounded-xl group">
         {input && url && (
-          <Link href={`/images/${id}`}>
+          <Link href={`/images/${id}`} scroll={false}>
             <div className="relative aspect-square size-full cursor-pointer select-none">
               <Image
                 alt={input}
@@ -71,7 +73,7 @@ export async function ImageCard({
 
         {showAuthor && (
           <div className="mt-2 rounded-xl p-1">
-            <p className={cn('text-sm truncate')}>{user?.email}</p>
+            <p className={cn('text-sm truncate')}>{profile?.id}</p>
             {canPublic && (
               <form action={publicImage}>
                 <input hidden defaultValue={id} name="id" />

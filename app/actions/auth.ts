@@ -52,6 +52,21 @@ export const signInAction = async (formData: FormData) => {
   return redirect('/');
 };
 
+export const signInWithGithub = async () => {
+  const supabase = createClient();
+
+  const { data } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+    options: {
+      redirectTo: `${process.env.NEXT_PUBLIC_WEBSITE_URL}/auth/callback`,
+    },
+  });
+
+  if (data.url) {
+    redirect(data.url);
+  }
+};
+
 export const forgotPasswordAction = async (formData: FormData) => {
   const email = formData.get('email')?.toString();
   const supabase = createClient();

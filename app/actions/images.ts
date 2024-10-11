@@ -61,7 +61,7 @@ export const generate = async (prevState: any, formData: FormData) => {
       .insert({
         id,
         input,
-        is_public: isPublic,
+        isPublic,
       })
       .select()
       .single()
@@ -78,7 +78,7 @@ export const generate = async (prevState: any, formData: FormData) => {
       error: null,
     };
   } catch (error) {
-    console.error(error);
+    console.log(error);
     setFlashMessage({ type: "error", message: "Failed to generate image" });
     return {
       error: 'Failed to generate image.',

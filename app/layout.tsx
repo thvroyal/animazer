@@ -1,15 +1,12 @@
-import Header from '@/components/layouts/header';
-import { ThemeSwitcher } from '@/components/theme-switcher';
+import { FlashMessage } from '@/components/flash-message';
 import { Toaster } from '@/components/ui/toaster';
+import { getFlashMessage } from '@/utils/flash-message';
 import { GeistSans } from 'geist/font/sans';
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
-import Footer from '@/components/layouts/footer';
-import { FlashMessage } from '@/components/flash-message';
-import { getFlashMessage } from '@/utils/flash-message';
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
+const defaultUrl = process.env.NEXT_PUBLIC_WEBSITE_URL
+  ? `https://${process.env.NEXT_PUBLIC_WEBSITE_URL}`
   : 'http://localhost:3000';
 
 export const metadata = {
@@ -21,10 +18,8 @@ export const metadata = {
 
 export default function RootLayout({
   children,
-  modal,
 }: {
   children: React.ReactNode;
-  modal: React.ReactNode;
 }) {
   const flashMessage = getFlashMessage();
   return (
@@ -36,16 +31,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <Header />
-              <div className="flex flex-col gap-20 container">
-                {children}
-                {modal}
-              </div>
-              <Footer />
-            </div>
-          </main>
+          {children}
           <Toaster />
           <FlashMessage flashMessage={flashMessage} />
         </ThemeProvider>
