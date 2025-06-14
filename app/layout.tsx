@@ -1,6 +1,4 @@
-import { FlashMessage } from '@/components/flash-message';
 import { Toaster } from '@/components/ui/toaster';
-import { getFlashMessage } from '@/utils/flash-message';
 import { GeistSans } from 'geist/font/sans';
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
@@ -21,7 +19,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const flashMessage = getFlashMessage();
   return (
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
@@ -33,7 +30,6 @@ export default function RootLayout({
         >
           {children}
           <Toaster />
-          <FlashMessage flashMessage={flashMessage} />
         </ThemeProvider>
       </body>
     </html>

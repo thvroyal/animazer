@@ -6,6 +6,9 @@ const nextConfig = {
         hostname: 'localhost',
         port: '54321',
       },
+      {
+        hostname: 'images.unsplash.com',
+      },
     ],
   },
   async redirects() {

@@ -6,7 +6,8 @@ import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function Login({ searchParams }: { searchParams: Message }) {
+export default async function Login(props: { searchParams: Promise<Message> }) {
+  const searchParams = await props.searchParams;
   return (
     <div className="w-full lg:grid h-screen lg:grid-cols-2">
       <div className="flex items-center justify-center py-12">

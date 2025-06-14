@@ -1,5 +1,6 @@
-import Footer from '@/components/layouts/footer';
-import Header from '@/components/layouts/header';
+import { AppSidebar } from '@/components/app-sidebar';
+import { PromptInputWithActions } from '@/components/prompt-input';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
 export default function AppLayout({
   children,
@@ -9,15 +10,15 @@ export default function AppLayout({
   modal: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen flex flex-col items-center">
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
-        <Header />
-        <div className="flex flex-col gap-20 container">
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="flex-1 w-full">
+        <div className="h-full w-full relative">
           {children}
+          <PromptInputWithActions />
           {modal}
         </div>
-        <Footer />
-      </div>
-    </main>
+      </main>
+    </SidebarProvider>
   );
 }

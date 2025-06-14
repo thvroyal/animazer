@@ -1,13 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "eslint-check": "eslint --max-warnings=0 .",
     "prettier-check": "prettier --check .",
     "prettier-write": "prettier --write .",
-    "supabase:generate-types": "supabase gen types --lang=typescript --local --schema=storage,public > supabase/functions/_shared/database.types.ts"
+    "supabase:generate-types": "supabase gen types --project-id $PROJECT_REF --lang=typescript --local --schema=storage,public > database.types.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -19,8 +19,10 @@
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-navigation-menu": "^1.2.0",
     "@radix-ui/react-select": "^2.1.1",
+    "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
+    "@radix-ui/react-tooltip": "^1.2.7",
     "@radix-ui/react-visually-hidden": "^1.1.0",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
@@ -31,10 +33,10 @@
     "framer-motion": "^11.11.1",
     "geist": "^1.2.1",
     "lucide-react": "^0.436.0",
-    "next": "latest",
+    "next": "15.3.3",
     "next-themes": "^0.3.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-hook-form": "^7.53.0",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"
@@ -42,8 +44,8 @@
   "devDependencies": {
     "@eslint/js": "^9.10.0",
     "@types/node": "20.10.6",
-    "@types/react": "18.2.46",
-    "@types/react-dom": "18.2.18",
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6",
     "@types/uuid": "^10.0.0",
     "@vercel/style-guide": "^6.0.0",
     "eslint": "^9.10.0",
@@ -55,5 +57,9 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.3.3"
   },
-  "prettier": "@vercel/style-guide/prettier"
+  "prettier": "@vercel/style-guide/prettier",
+  "overrides": {
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6"
+  }
 }
