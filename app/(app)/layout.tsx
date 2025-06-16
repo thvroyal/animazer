@@ -1,6 +1,7 @@
 import { AppSidebar } from '@/components/app-sidebar';
 import { PromptInputWithActions } from '@/components/prompt-input';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import StickyAuthButton from '@/components/sticky-auth-button';
 
 export default function AppLayout({
   children,
@@ -19,6 +20,7 @@ export default function AppLayout({
           {modal}
         </div>
       </main>
+      <StickyAuthButton />
     </SidebarProvider>
   );
 }
