@@ -10,6 +10,7 @@
     "supabase:generate-types": "supabase gen types --project-id $PROJECT_REF --lang=typescript --local --schema=storage,public > database.types.ts"
   },
   "dependencies": {
+    "@google/genai": "^1.5.1",
     "@hookform/resolvers": "^3.9.0",
     "@huggingface/inference": "^2.8.0",
     "@radix-ui/react-avatar": "^1.1.10",

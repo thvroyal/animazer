@@ -9,96 +9,133 @@ import {
 import { Button } from "@/components/ui/button"
 import { ArrowUp, Globe, Mic, MoreHorizontal, Plus } from "lucide-react"
 import type React from "react"
-import { useState } from "react"
+import { useActionState, useEffect, useRef, useState } from "react"
+import { generateImage, type GenerateImageResult } from "@/app/actions/images"
+import { useRouter } from "next/navigation"
+import { toast } from "@/hooks/use-toast"
 
 function PromptInputWithActions() {
   const [prompt, setPrompt] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+  const formRef = useRef<HTMLFormElement>(null)
+  
+  // Use React 19's useActionState hook
+  const [state, formAction, isPending] = useActionState<GenerateImageResult | null, FormData>(
+    generateImage,
+    null
+  )
+
+  // Handle the result state
+  useEffect(() => {
+    if (!state) return;
+
+    if (state.success) {
+      // Show success toast
+      toast({
+        title: "Success!",
+        description: state.message,
+        variant: "default",
+      })
+
+      // Clear the prompt and navigate to the generated image
+      setPrompt("")
+      if (state.imageId) {
+        router.push(`/images/${state.imageId}`)
+      }
+    } else {
+      // Show error toast
+      toast({
+        title: "Error",
+        description: state.message,
+        variant: "destructive",
+      })
+    }
+  }, [state, router])
 
   const handleSubmit = () => {
-    if (!prompt.trim()) return
-
-    setIsLoading(true)
-
-    // Simulate API call
-    console.log("Processing:", prompt)
-    setTimeout(() => {
-      setPrompt("")
-      setIsLoading(false)
-    }, 1500)
+    if (!prompt.trim()) return;
+    
+    // Trigger form submission
+    formRef.current?.requestSubmit();
   }
 
   return (
     <div className="sticky inset-x-0 bottom-0 mx-auto max-w-3xl px-3 pb-3 md:px-5 md:pb-5">
-      <PromptInput
-        isLoading={isLoading}
-        value={prompt}
-        onValueChange={setPrompt}
-        onSubmit={handleSubmit}
-        className="border-input bg-popover relative z-10 w-full rounded-3xl border p-0 pt-1 shadow-xs"
-      >
-        <div className="flex flex-col">
-          <PromptInputTextarea
-            placeholder="Ask anything"
-            className="min-h-[44px] pt-3 pl-4 text-base leading-[1.3] sm:text-base md:text-base"
-          />
+      <form ref={formRef} action={formAction}>
+        <input type="hidden" name="prompt" value={prompt} />
+        <PromptInput
+          isLoading={isPending}
+          value={prompt}
+          onValueChange={setPrompt}
+          onSubmit={handleSubmit}
+          className="border-input bg-popover relative z-10 w-full rounded-3xl border p-0 pt-1 shadow-xs"
+        >
+          <div className="flex flex-col">
+            <PromptInputTextarea
+              placeholder="Ask anything"
+              className="min-h-[44px] pt-3 pl-4 text-base leading-[1.3] sm:text-base md:text-base"
+            />
 
-          <PromptInputActions className="mt-5 flex w-full items-center justify-between gap-2 px-3 pb-3">
-            <div className="flex items-center gap-2">
-              <PromptInputAction tooltip="Add a new action">
+            <PromptInputActions className="mt-5 flex w-full items-center justify-between gap-2 px-3 pb-3">
+              <div className="flex items-center gap-2">
+                <PromptInputAction tooltip="Add a new action">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="size-9 rounded-full"
+                  >
+                    <Plus size={18} />
+                  </Button>
+                </PromptInputAction>
+
+                <PromptInputAction tooltip="Search">
+                  <Button type="button" variant="outline" className="rounded-full">
+                    <Globe size={18} />
+                    Search
+                  </Button>
+                </PromptInputAction>
+
+                <PromptInputAction tooltip="More actions">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="size-9 rounded-full"
+                  >
+                    <MoreHorizontal size={18} />
+                  </Button>
+                </PromptInputAction>
+              </div>
+              <div className="flex items-center gap-2">
+                <PromptInputAction tooltip="Voice input">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="size-9 rounded-full"
+                  >
+                    <Mic size={18} />
+                  </Button>
+                </PromptInputAction>
+
                 <Button
-                  variant="outline"
+                  type="submit"
                   size="icon"
+                  disabled={!prompt.trim() || isPending}
                   className="size-9 rounded-full"
                 >
-                  <Plus size={18} />
+                  {!isPending ? (
+                    <ArrowUp size={18} />
+                  ) : (
+                    <span className="size-3 rounded-xs bg-white" />
+                  )}
                 </Button>
-              </PromptInputAction>
-
-              <PromptInputAction tooltip="Search">
-                <Button variant="outline" className="rounded-full">
-                  <Globe size={18} />
-                  Search
-                </Button>
-              </PromptInputAction>
-
-              <PromptInputAction tooltip="More actions">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="size-9 rounded-full"
-                >
-                  <MoreHorizontal size={18} />
-                </Button>
-              </PromptInputAction>
-            </div>
-            <div className="flex items-center gap-2">
-              <PromptInputAction tooltip="Voice input">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="size-9 rounded-full"
-                >
-                  <Mic size={18} />
-                </Button>
-              </PromptInputAction>
-
-              <Button
-                size="icon"
-                disabled={!prompt.trim() || isLoading}
-                onClick={handleSubmit}
-                className="size-9 rounded-full"
-              >
-                {!isLoading ? (
-                  <ArrowUp size={18} />
-                ) : (
-                  <span className="size-3 rounded-xs bg-white" />
-                )}
-              </Button>
-            </div>
-          </PromptInputActions>
-        </div>
-      </PromptInput>
+              </div>
+            </PromptInputActions>
+          </div>
+        </PromptInput>
+      </form>
     </div>
   )
 }

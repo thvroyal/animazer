@@ -1,27 +1,24 @@
-import { publicImage } from '@/app/actions/images';
 import { Tables } from '@/database.types';
 import { cn } from '@/lib/utils';
 import { createClient } from '@/utils/supabase/server';
 import Image from 'next/image';
-import { SubmitButton } from './submit-button';
 import { Copy } from 'lucide-react';
-import CopyButton from './copy-button';
+import CopyButton from '@/components/copy-button';
 import Link from 'next/link';
+import { PublicImageForm } from './public-image-form';
 
 export interface ImageCardProps extends Tables<'images'> {
   url: string;
   showAuthor?: boolean;
-  profile?: Tables<'profiles'> | null
 }
 
 export async function ImageCard({
   url,
-  input,
+  prompt,
   id,
-  profileId,
-  isPublic,
+  user: imageUser,
+  is_public,
   showAuthor = false,
-  profile,
 }: ImageCardProps) {
   const supabase = createClient();
 
@@ -29,16 +26,16 @@ export async function ImageCard({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const canPublic = user && user.id === profileId && !isPublic;
+  const canPublic = user && user.id === imageUser && !is_public;
 
   return (
     <div className="overflow-hidden rounded-2xl shadow-sm">
       <div className="relative flex w-full flex-col rounded-xl group">
-        {input && url && (
+        {prompt && url && (
           <Link href={`/images/${id}`} scroll={false}>
             <div className="relative aspect-square size-full cursor-pointer select-none">
               <Image
-                alt={input}
+                alt={prompt}
                 src={url}
                 loading="lazy"
                 width={500}
@@ -55,12 +52,12 @@ export async function ImageCard({
               >
                 <div className="w-full inline-flex items-center gap-2">
                   <span className="text-xs line-clamp-3 text-foreground/80">
-                    {input}
+                    {prompt}
                   </span>
                   <CopyButton
-                    content={input}
+                    content={prompt}
                     variant="link"
-                    size="icon-xs"
+                    size="icon"
                     className="text-foreground/70 hover:text-foreground"
                   >
                     <Copy />
@@ -73,13 +70,8 @@ export async function ImageCard({
 
         {showAuthor && (
           <div className="mt-2 rounded-xl p-1">
-            <p className={cn('text-sm truncate')}>{profile?.id}</p>
-            {canPublic && (
-              <form action={publicImage}>
-                <input hidden defaultValue={id} name="id" />
-                <SubmitButton>Public</SubmitButton>
-              </form>
-            )}
+            <p className={cn('text-sm truncate')}>{imageUser}</p>
+            {canPublic && <PublicImageForm imageId={id} />}
           </div>
         )}
       </div>

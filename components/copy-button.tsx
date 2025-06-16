@@ -1,43 +1,33 @@
 'use client';
 
-import { useCopy } from '@/hooks/use-copy';
-import { PropsWithChildren } from 'react';
-import { Button, ButtonProps } from './ui/button';
-import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { Check, Copy } from 'lucide-react';
+import { type VariantProps } from 'class-variance-authority';
+import { buttonVariants } from '@/components/ui/button';
 
-interface CopyButtonProps extends PropsWithChildren, ButtonProps {
+interface CopyButtonProps extends React.ComponentProps<"button">, VariantProps<typeof buttonVariants> {
   content: string;
-  successMessage?: string;
+  children?: React.ReactNode;
+  asChild?: boolean;
 }
 
-export default function CopyButton({
-  content,
-  children,
-  ...props
-}: CopyButtonProps) {
-  const [_, copy] = useCopy();
-  const { toast } = useToast();
+export default function CopyButton({ content, children, ...props }: CopyButtonProps) {
+  const [copied, setCopied] = useState(false);
 
-  const handleCopy = (text: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    copy(text)
-      .then(() => {
-        toast({
-          title: 'Copied to clipboard',
-        });
-      })
-      .catch((error) => {
-        toast({
-          title: 'Failed copy to clipboard',
-          description: error,
-          variant: 'destructive',
-        });
-      });
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(content);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
   };
 
   return (
-    <Button {...props} onClick={handleCopy(content)}>
-      {children}
+    <Button onClick={handleCopy} {...props}>
+      {copied ? <Check className="h-4 w-4" /> : children || <Copy className="h-4 w-4" />}
     </Button>
   );
-}
+} 
