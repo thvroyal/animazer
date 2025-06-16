@@ -9,9 +9,9 @@ const defaultUrl = process.env.NEXT_PUBLIC_WEBSITE_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: 'Animazer - Generate the anime style image',
+  title: 'Unreal - AI-Generated Images',
   description:
-    'The collect of generated image with style anime, hand drawing, cartoon, ...',
+    'Create stunning AI-generated images with various styles including anime, hand drawing, cartoon, and more.',
 };
 
 export default function RootLayout({

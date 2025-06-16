@@ -9,7 +9,7 @@ export default function Header() {
         <div className="flex gap-5 items-center">
           <SidebarTrigger />
           <Link href={'/'} className="font-semibold">
-            Animazer
+            Unreal
           </Link>
           <Navigation />
         </div>

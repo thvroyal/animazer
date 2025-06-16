@@ -1,4 +1,5 @@
 {
+  "name": "unreal",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
