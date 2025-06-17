@@ -5,6 +5,7 @@ This module provides an extensible architecture for integrating multiple AI imag
 ## Current Providers
 
 - **Gemini** (Google GenAI) - Fully implemented and set as default
+- **Mock** - Local development provider that generates placeholder images (no API costs)
 - **OpenAI** (DALL-E) - Stub implementation (ready for development)
 
 ## Usage
@@ -12,7 +13,7 @@ This module provides an extensible architecture for integrating multiple AI imag
 ### Basic Usage
 
 ```typescript
-import { AIProviderFactory } from '@/utils/providers';
+import { AIProviderFactory } from '@/utils/ai-providers';
 
 // Use the default provider (currently Gemini)
 const provider = AIProviderFactory.getDefaultProvider();
@@ -21,6 +22,10 @@ const result = await provider.generateImage('A beautiful sunset over mountains')
 // Use a specific provider
 const geminiProvider = AIProviderFactory.getProvider('gemini');
 const result = await geminiProvider.generateImage('A cat wearing a hat');
+
+// Use the mock provider for development (no API costs)
+const mockProvider = AIProviderFactory.getProvider('mock');
+const result = await mockProvider.generateImage('A futuristic robot');
 ```
 
 ### With Configuration
@@ -80,6 +85,28 @@ Each provider may require its own environment variables:
 
 - `GEMINI_API_KEY` - Required for Google GenAI
 - `OPENAI_API_KEY` - Required for OpenAI (when implemented)
+- Mock provider requires no environment variables (works locally)
+
+## Switching Between Providers
+
+For easy switching between development and production:
+
+```typescript
+// Environment-based provider selection
+const providerName = process.env.NODE_ENV === 'development' ? 'mock' : 'gemini';
+const provider = AIProviderFactory.getProvider(providerName);
+
+// Or use a custom environment variable
+const providerName = process.env.AI_PROVIDER || 'gemini'; // defaults to gemini
+const provider = AIProviderFactory.getProvider(providerName);
+```
+
+Add this to your `.env.local` for development:
+```
+AI_PROVIDER=mock
+```
+
+And use `gemini` or remove the variable for production.
 
 ## Error Handling
 

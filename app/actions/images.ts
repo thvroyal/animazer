@@ -38,7 +38,8 @@ export async function generateImage(
   }
 
   try {
-    // Get the AI provider (currently defaults to Gemini)
+    // Get the AI provider (supports environment-based switching)
+    // Set AI_PROVIDER=mock in .env.local for development
     const aiProvider = AIProviderFactory.getDefaultProvider();
 
     // Generate image using the selected provider

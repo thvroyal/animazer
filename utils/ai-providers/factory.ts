@@ -1,10 +1,12 @@
 import { AIImageProvider, SupportedProvider } from './types';
 import { GeminiProvider } from './gemini';
+import { MockProvider } from './mock';
 
 // Factory class to manage AI providers
 export class AIProviderFactory {
-  private static providers: Map<SupportedProvider, () => AIImageProvider> = new Map([
+  private static providers = new Map<SupportedProvider, () => AIImageProvider>([
     ['gemini', () => new GeminiProvider()],
+    ['mock', () => new MockProvider()],
     // Future providers can be added here:
     // ['openai', () => new OpenAIProvider()],
     // ['stability', () => new StabilityAIProvider()],
@@ -22,7 +24,9 @@ export class AIProviderFactory {
   }
 
   static getDefaultProvider(): AIImageProvider {
-    return this.getProvider('gemini');
+    // Support environment-based provider selection
+    const defaultProvider = (process.env.AI_PROVIDER as SupportedProvider) || 'gemini';
+    return this.getProvider(defaultProvider);
   }
 
   static getSupportedProviders(): SupportedProvider[] {

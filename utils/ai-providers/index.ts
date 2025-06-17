@@ -2,6 +2,7 @@
 export * from './types';
 export * from './factory';
 export * from './gemini';
+export * from './mock';
 
 // Re-export commonly used items for convenience
 export { AIProviderFactory } from './factory';

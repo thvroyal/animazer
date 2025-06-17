@@ -22,4 +22,4 @@ export interface AIImageProvider {
   getName(): string;
 }
 
-export type SupportedProvider = 'gemini' | 'openai' | 'stability' | 'midjourney'; 
+export type SupportedProvider = 'gemini' | 'openai' | 'stability' | 'midjourney' | 'mock'; 
