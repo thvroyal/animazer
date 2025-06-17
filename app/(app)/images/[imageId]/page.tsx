@@ -12,7 +12,7 @@ export default async function DetailsPage({
   params: { imageId: string };
   isModal?: boolean;
 }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   // Get image from database
   const { data: imageData, error } = await supabase

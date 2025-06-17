@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { TablesInsert, Tables } from '@/database.types';
 
 export async function getOwnerImages() {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const {
     data: { user },
@@ -42,7 +42,7 @@ export async function getOwnerImages() {
 }
 
 export async function getPublicImages() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: images } = await supabase
     .from('images')
@@ -72,7 +72,7 @@ export async function getPublicImages() {
 }
 
 export async function insertImage(imageData: TablesInsert<'images'>) {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('images')
@@ -92,7 +92,7 @@ export async function uploadImageToStorage(
   fileBuffer: Buffer,
   contentType: string = 'image/jpeg'
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase.storage
     .from('images')

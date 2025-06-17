@@ -2,7 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { insertImage, uploadImageToStorage } from '@/utils/supabase/services/images';
-import { AIProviderFactory } from '@/utils/providers';
+import { AIProviderFactory } from '@/utils/ai-providers';
 import { v4 as uuidv4 } from 'uuid';
 import { redirect } from 'next/navigation';
 import { encodedRedirect } from '@/utils/utils';
@@ -28,7 +28,7 @@ export async function generateImage(
   }
 
   // Check if user is authenticated
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -116,7 +116,7 @@ export async function publicImage(
     };
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

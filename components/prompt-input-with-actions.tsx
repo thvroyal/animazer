@@ -1,29 +1,48 @@
-"use client"
+'use client';
 
 import {
   PromptInput,
   PromptInputAction,
   PromptInputActions,
   PromptInputTextarea,
-} from "@/components/ui/prompt-input"
-import { Button } from "@/components/ui/button"
-import { ArrowUp, Globe, Mic, MoreHorizontal, Plus } from "lucide-react"
-import type React from "react"
-import { useActionState, useEffect, useRef, useState } from "react"
-import { generateImage, type GenerateImageResult } from "@/app/actions/images"
-import { useRouter } from "next/navigation"
-import { toast } from "@/hooks/use-toast"
+} from '@/components/ui/prompt-input';
+import { Button } from '@/components/ui/button';
+import { ArrowUp, Globe, Mic, MoreHorizontal, Plus } from 'lucide-react';
+import type React from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
+import { generateImage, type GenerateImageResult } from '@/app/actions/images';
+import { useRouter } from 'next/navigation';
+import { toast } from '@/hooks/use-toast';
+import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 
 function PromptInputWithActions() {
-  const [prompt, setPrompt] = useState("")
-  const router = useRouter()
-  const formRef = useRef<HTMLFormElement>(null)
-  
+  const [prompt, setPrompt] = useState('');
+  const [isVisible, setIsVisible] = useState(true);
+  const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
+
   // Use React 19's useActionState hook
-  const [state, formAction, isPending] = useActionState<GenerateImageResult | null, FormData>(
-    generateImage,
-    null
-  )
+  const [state, formAction, isPending] = useActionState<
+    GenerateImageResult | null,
+    FormData
+  >(generateImage, null);
+
+  // Use Framer Motion's useScroll hook
+  const { scrollY } = useScroll();
+
+  // Handle scroll direction detection using useMotionValueEvent
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    const direction = latest > previous ? 'down' : 'up';
+
+    // Only update visibility if we've scrolled a meaningful amount
+    const delta = Math.abs(latest - previous);
+    if (direction === 'down' && latest > 100 && delta > 5) {
+      setIsVisible(false);
+    } else if (direction === 'up') {
+      setIsVisible(true);
+    }
+  });
 
   // Handle the result state
   useEffect(() => {
@@ -32,35 +51,48 @@ function PromptInputWithActions() {
     if (state.success) {
       // Show success toast
       toast({
-        title: "Success!",
+        title: 'Success!',
         description: state.message,
-        variant: "default",
-      })
+        variant: 'default',
+      });
 
       // Clear the prompt and navigate to the generated image
-      setPrompt("")
+      setPrompt('');
       if (state.imageId) {
-        router.push(`/images/${state.imageId}`)
+        router.push(`/images/${state.imageId}`);
       }
     } else {
       // Show error toast
       toast({
-        title: "Error",
+        title: 'Error',
         description: state.message,
-        variant: "destructive",
-      })
+        variant: 'destructive',
+      });
     }
-  }, [state, router])
+  }, [state, router]);
 
   const handleSubmit = () => {
     if (!prompt.trim()) return;
-    
+
     // Trigger form submission
     formRef.current?.requestSubmit();
-  }
+  };
 
   return (
-    <div className="sticky inset-x-0 bottom-0 mx-auto max-w-3xl px-3 pb-3 md:px-5 md:pb-5">
+    <motion.div
+      className="sticky inset-x-0 bottom-0 mx-auto max-w-3xl px-3 pb-3 md:px-5 md:pb-5"
+      initial={{ y: 0 }}
+      animate={{
+        y: isVisible ? 0 : 100,
+        opacity: isVisible ? 1 : 0,
+      }}
+      transition={{
+        type: 'spring',
+        stiffness: 300,
+        damping: 30,
+        mass: 0.8,
+      }}
+    >
       <form ref={formRef} action={formAction}>
         <input type="hidden" name="prompt" value={prompt} />
         <PromptInput
@@ -90,7 +122,11 @@ function PromptInputWithActions() {
                 </PromptInputAction>
 
                 <PromptInputAction tooltip="Search">
-                  <Button type="button" variant="outline" className="rounded-full">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="rounded-full"
+                  >
                     <Globe size={18} />
                     Search
                   </Button>
@@ -136,8 +172,8 @@ function PromptInputWithActions() {
           </div>
         </PromptInput>
       </form>
-    </div>
-  )
+    </motion.div>
+  );
 }
 
-export { PromptInputWithActions }
+export { PromptInputWithActions };

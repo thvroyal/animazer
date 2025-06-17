@@ -13,7 +13,7 @@ import { User, LogOut, Settings } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 export default async function AuthButton() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },

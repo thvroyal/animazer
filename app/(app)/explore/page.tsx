@@ -1,4 +1,5 @@
-import MasonryGrid, { type ImageData } from '@/components/masonry-grid';
+import MasonryGrid from '@/components/masonry-grid';
+import { ImageData } from '@/components/image-card';
 
 // Demo data with natural aspect ratios
 const demoImages: ImageData[] = [

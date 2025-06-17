@@ -1,80 +1,67 @@
-import { Tables } from '@/database.types';
-import { cn } from '@/lib/utils';
-import { createClient } from '@/utils/supabase/server';
 import Image from 'next/image';
-import { Copy } from 'lucide-react';
-import CopyButton from '@/components/copy-button';
 import Link from 'next/link';
-import { PublicImageForm } from './public-image-form';
 
-export interface ImageCardProps extends Tables<'images'> {
-  url: string;
-  showAuthor?: boolean;
+export interface ImageData {
+  id: string;
+  src: string;
+  title: string;
+  author: string;
+  likes: number;
+  width: number;
+  height: number;
 }
 
-export async function ImageCard({
-  url,
-  prompt,
-  id,
-  user: imageUser,
-  is_public,
-  showAuthor = false,
-}: ImageCardProps) {
-  const supabase = createClient();
+interface ImageCardProps {
+  image: ImageData;
+}
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const canPublic = user && user.id === imageUser && !is_public;
-
+export default function ImageCard({ image }: ImageCardProps) {
   return (
-    <div className="overflow-hidden rounded-2xl shadow-sm">
-      <div className="relative flex w-full flex-col rounded-xl group">
-        {prompt && url && (
-          <Link href={`/images/${id}`} scroll={false}>
-            <div className="relative aspect-square size-full cursor-pointer select-none">
-              <Image
-                alt={prompt}
-                src={url}
-                loading="lazy"
-                width={500}
-                height={500}
-                className={cn(
-                  'pointer-events-none size-full rounded-xl object-cover object-top',
-                )}
-              />
-              <div
-                className={cn(
-                  'hidden group-hover:inline-flex absolute size-full p-2.5 bg-transparent bg-gradient-to-t from-background/70 to-transparent to-40% bottom-0 transition-colors',
-                  'group-hover:flex items-end',
-                )}
-              >
-                <div className="w-full inline-flex items-center gap-2">
-                  <span className="text-xs line-clamp-3 text-foreground/80">
-                    {prompt}
+    <div className="break-inside-avoid mb-1">
+      <div className="group relative overflow-hidden bg-muted rounded-sm">
+        <Link href={`/images/${image.id}`}>
+          <div className="relative">
+            <Image
+              src={image.src}
+              alt={image.title}
+              width={image.width}
+              height={image.height}
+              className="w-full h-auto object-cover transition-transform group-hover:scale-110 duration-500 ease-in-out"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+
+            {/* Overlay with image info */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <div className="absolute bottom-0 left-0 right-0 p-3">
+                <p className="text-white text-sm line-clamp-2 mb-2 font-medium">
+                  {image.title}
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-white/90 text-sm font-medium">
+                    {image.author}
                   </span>
-                  <CopyButton
-                    content={prompt}
-                    variant="link"
-                    size="icon"
-                    className="text-foreground/70 hover:text-foreground"
-                  >
-                    <Copy />
-                  </CopyButton>
+                  <div className="flex items-center gap-1">
+                    <svg
+                      className="w-4 h-4 text-white/90"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-white/90 text-sm font-medium">
+                      {image.likes}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </Link>
-        )}
-
-        {showAuthor && (
-          <div className="mt-2 rounded-xl p-1">
-            <p className={cn('text-sm truncate')}>{imageUser}</p>
-            {canPublic && <PublicImageForm imageId={id} />}
           </div>
-        )}
+        </Link>
       </div>
     </div>
   );
-}
+} 
